@@ -87,7 +87,11 @@ footer {
   perspective: 1200px;
   flex-wrap: wrap;
 }
-
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 /* CARD BASE */
 .card-3d {
   width: 240px;
@@ -103,6 +107,7 @@ footer {
 
   transition: all 0.4s ease;
   transform-style: preserve-3d;
+  position: relative;
 }
 .card-3d:nth-child(1) { transform: rotateY(18deg) translateZ(-40px); }
 .card-3d:nth-child(2) { transform: rotateY(8deg) translateZ(-20px); }
@@ -110,9 +115,46 @@ footer {
 .card-3d:nth-child(4) { transform: rotateY(-18deg) translateZ(-40px); }
 /* HOVER */
 .card-3d:hover {
-  transform: translateY(-15px) scale(1.08) rotateY(0deg);
-  background: rgba(51, 65, 85, 0.7);
-  z-index: 10;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+.card-3d h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #1f2937;
+  transition: 0.3s;
+}
+
+.card-3d p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.4;
+  transition: 0.3s;
+}
+
+/* HOVER EFFECT (this is important) */
+.card-3d:hover h2 {
+  color: #4f46e5; /* nice modern purple/blue */
+}
+
+.card-3d:hover p {
+  color: #333;
+}
+
+/* OPTIONAL: add subtle icon vibe */
+.card-3d::before {
+  content: "→";
+  font-size: 18px;
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  opacity: 0;
+  transition: 0.3s;
+}
+.card-3d:hover::before {
+  opacity: 1;
+  transform: translateX(4px);
 }
 .auth-buttons {
   display: flex;
@@ -172,4 +214,80 @@ footer {
   text-align: center;
   margin-top: 40px;
   font-size: 36px;
+}
+
+/* container */
+.question-container {
+  max-width: 800px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 20px;
+}
+
+/* each question card */
+.question-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 18px 20px;
+  border-radius: 12px;
+  transition: 0.3s;
+  text-decoration: none;
+  color: white;
+}
+
+.question-card:hover {
+  transform: translateY(-3px);
+  background: rgba(51, 65, 85, 0.7);
+}
+
+/* title */
+.question-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* tags */
+.question-meta {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-top: 5px;
+}
+.tag {
+  font-size: 11px;
+  background: #eef2ff;
+  color: #4f46e5;
+  padding: 3px 8px;
+  border-radius: 999px;
+  width: fit-content;
+}
+/* TAG BASE */
+.tag {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  width: fit-content;
+  font-weight: 500;
+}
+
+/* COLOR VARIANTS */
+.tag-blue {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.tag-green {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tag-orange {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.tag-pink {
+  background: #fce7f3;
+  color: #9d174d;
 }

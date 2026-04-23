@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script>
+  if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "signin.html";
+  }
+</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -11,9 +16,9 @@
 
   <!-- SAME NAVBAR STYLE -->
   <nav class="navbar">
-    <h1 class="logo">JobReady</h1>
-    <a href="index.html" class="nav-btn">Home</a>
-  </nav>
+  <h1 class="logo">JobReady</h1>
+  <div class="auth-buttons" id="nav-actions"></div>
+</nav>
 
   
   <h1 class="page-title">Topics</h1>
@@ -21,32 +26,65 @@
   <!-- SAME CARD SYSTEM AS INDEX -->
   <section class="features">
 
-    <div class="card-3d">
-      <h2>DSA</h2>
-      <p>Arrays, DP, Trees & more</p>
-    </div>
+  <a href="topic.html?topic=dsa" class="card-3d">
+  <div class="card-content">
+    <h2>DSA</h2>
+    <span class="tag">Coding</span>
+    <p>Arrays, DP, Trees & more</p>
+  </div>
+</a>
 
-    <div class="card-3d">
-      <h2>HR</h2>
-      <p>Interview questions & answers</p>
-    </div>
+  <a href="topic.html?topic=hr" class="card-3d">
+  <div class="card-content">
+    <h2>HR</h2>
+    <span class="tag tag-green">Interview</span>
+    <p>Interview questions & answers</p>
+      </div>
+  </a>
 
-    <div class="card-3d">
+  <a href="topic.html?topic=aptitude" class="card-3d">
+    <div class="card-content">
       <h2>Aptitude</h2>
+      <span class="tag tag-orange">Practice</span>
       <p>Quant, Logical, Verbal</p>
     </div>
+  </a>
 
-    <div class="card-3d">
+  <a href="resume.html" class="card-3d">
+    <div class="card-content">
       <h2>Resume</h2>
+      <span class="tag tag-pink">Career</span>
       <p>Build & improve resume</p>
     </div>
+  </a>
 
-  </section>
+</section>
 
   <!-- OPTIONAL (for consistency) -->
   <footer>
     <p>2026 JobReady</p>
   </footer>
-
 </body>
+<script src="auth.js"></script>
+
+
+<script src="auth.js"></script>
+
+<script>
+window.onload = function() {
+  const nav = document.getElementById("nav-actions");
+
+  if (localStorage.getItem("isLoggedIn") === "true") {
+    nav.innerHTML = `
+      <a href="index.html" class="auth-btn">Home</a>
+      <a href="#" onclick="logout()" class="auth-btn">Logout</a>
+    `;
+  } else {
+    nav.innerHTML = `
+      <a href="signin.html" class="auth-btn">Sign In</a>
+      <a href="signup.html" class="auth-btn">Sign Up</a>
+    `;
+  }
+}
+</script>
 </html>

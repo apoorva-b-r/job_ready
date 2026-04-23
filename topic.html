@@ -1,13 +1,37 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
+<script>
+  if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "signin.html";
+  }
+</script>
+
 <head>
   <meta charset="UTF-8" />
   <title>Topic</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <h2 id="topic-title"></h2>
-  <ul id="question-list"></ul>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <h1 class="logo">JobReady</h1>
+    <div class="auth-buttons">
+      <a href="topics.html" class="auth-btn">Back</a>
+      <a href="#" onclick="logout()" class="auth-btn">Logout</a>
+    </div>
+  </nav>
+
+  <!-- TITLE -->
+  <h1 class="page-title" id="topic-title"></h1>
+
+  <!-- QUESTIONS -->
+  <div class="question-container" id="question-list"></div>
+
+  <script src="auth.js"></script>
   <script src="script.js"></script>
+
 </body>
 </html>

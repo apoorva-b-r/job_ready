@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+if (localStorage.getItem("isLoggedIn") === "true") {
+  console.log("User already logged in");
+}
+</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,20 +15,45 @@
 <body>
 
   <nav class="navbar">
-    <h1 class="logo">JobReady</h1>
+  <h1 class="logo">JobReady</h1>
 
-    <div class="auth-buttons">
-      <a href="signin.html" class="auth-btn">Sign In</a>
-      <a href="signup.html" class="auth-btn">Sign Up</a>
-    </div>
-  </nav>
+  <div class="auth-buttons" id="nav-actions"></div>
+</nav>
 
   <section class="hero">
     <h1>Prepare. Practice. Get Hired!</h1>
     <p>Your all-in-one platform for Resume Building & Interview Practice</p>
 
-    <a href="topics.html" class="btn">Get Started</a>
+    <a href="#" class="btn" id="start-btn">Get Started</a>
   </section>
 
 </body>
+<script src="auth.js"></script>
+
+<script>
+window.onload = function() {
+  const nav = document.getElementById("nav-actions");
+
+  if (localStorage.getItem("isLoggedIn") === "true") {
+    nav.innerHTML = `
+      <a href="topics.html" class="auth-btn">Dashboard</a>
+      <a href="#" onclick="logout()" class="auth-btn">Logout</a>
+    `;
+  } else {
+    nav.innerHTML = `
+      <a href="signin.html" class="auth-btn">Sign In</a>
+      <a href="signup.html" class="auth-btn">Sign Up</a>
+    `;
+  }
+};
+</script>
+<script>
+const startBtn = document.getElementById("start-btn");
+
+if (localStorage.getItem("isLoggedIn") === "true") {
+  startBtn.href = "topics.html";
+} else {
+  startBtn.href = "signin.html";
+}
+</script>
 </html>

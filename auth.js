@@ -10,11 +10,13 @@ function login() {
   }
 
   if (user.email === email && user.password === password) {
-    alert("Login successful!");
-    window.location.href = "topics.html";
-  } else {
-    alert("Invalid credentials");
-  }
+  localStorage.setItem("isLoggedIn", "true");
+  alert("Login successful!");
+  window.location.href = "topics.html";
+} else {
+  alert("Invalid credentials");
+}
+  localStorage.setItem("isLoggedIn", "true");
 }
 function signup() {
   let name = document.getElementById("signup-name").value;
@@ -30,4 +32,8 @@ function signup() {
 
   alert("Signup successful! Now login.");
   window.location.href = "signin.html";
+}
+function logout() {
+  localStorage.removeItem("isLoggedIn");
+  window.location.href = "index.html";
 }

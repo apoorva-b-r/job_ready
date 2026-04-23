@@ -108,19 +108,31 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!questionData[topic]) return;
 
     document.getElementById("topic-title").innerText = topic.toUpperCase();
+    const container = document.getElementById("question-list");
 
-    questionData[topic].forEach(q => {
-      const li = document.createElement("li");
+questionData[topic].forEach(q => {
 
-      const solved = localStorage.getItem(`solved-${topic}-${q.id}`);
-      const star = solved ? " ⭐" : "";
+  const solved = localStorage.getItem(`solved-${topic}-${q.id}`);
+  const star = solved ? " ⭐" : "";
 
-      li.innerHTML = `<a href="question.html?topic=${topic}&id=${q.id}">
-        ${q.title}${star}
-      </a>`;
+  const card = document.createElement("a");
+  card.className = "question-card";
+  card.href = `question.html?topic=${topic}&id=${q.id}`;
 
-      document.getElementById("question-list").appendChild(li);
-    });
+  if (solved) {
+    card.classList.add("solved");
+  }
+
+  card.innerHTML = `
+    <div class="question-title">${q.title}${star}</div>
+    <div class="question-meta">
+      ${q.difficulty || ""} 
+      ${q.tags ? "• " + q.tags.join(", ") : ""}
+    </div>
+  `;
+
+  container.appendChild(card);
+});
   }
 
   // ================= QUESTION PAGE =================
