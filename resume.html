@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resume Builder</title>
+
+<style>
+body {
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #1e293b;
+  border-radius: 12px;
+}
+
+h1 { text-align: center; color: #38bdf8; }
+
+label { margin-top: 15px; display: block; }
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  background: #0f172a;
+  color: white;
+  border: 1px solid #334155;
+}
+
+.skills {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px;
+  width: 100%;
+  background: #38bdf8;
+  border: none;
+  cursor: pointer;
+}
+
+.step { display: none; }
+.step.active { display: block; }
+.suggestions {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  margin-top: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.suggestions div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions div:hover {
+  background: #334155;
+}
+
+.selected-skills {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-tag {
+  background: #334155;
+  padding: 6px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skill-tag span {
+  cursor: pointer;
+  color: #f87171;
+}
+
+.list {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-item {
+  background: #0f172a;
+  border: 1px solid #334155;
+  padding: 10px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.card-item span {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  color: #f87171;
+}
+#result {
+  line-height: 1.6;
+}
+
+#result h3 {
+  color: #38bdf8;
+}
+
+#result h4 {
+  margin-top: 15px;
+  color: #facc15;
+}
+.report {
+  line-height: 1.6;
+}
+
+.score-box {
+  background: #0f172a;
+  border: 1px solid #334155;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.score-box h3 {
+  font-size: 28px;
+  color: #38bdf8;
+}
+
+.bar-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.bar {
+  flex: 1;
+  height: 10px;
+  background: #1e293b;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #6366f1);
+}
+
+.best-role {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #22c55e;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Resume Builder</h1>
+
+<!-- STEP 1 -->
+<div id="step-1" class="step active">
+
+  <label>First Name</label>
+  <input type="text" id="firstName" placeholder="Enter first name" required>
+
+  <label>Last Name</label>
+  <input type="text" id="lastName" placeholder="Enter last name" required>
+
+  <label>Email</label>
+  <input type="email" id="email" placeholder="Enter email" required>
+
+  <label>Phone Number</label>
+  <input type="tel" id="phone" placeholder="Enter phone number" required>
+
+  <label>Date of Birth</label>
+  <input type="date" id="dob" required>
+
+  <label>Gender</label>
+  <select id="gender">
+    <option value="">Select</option>
+    <option>Male</option>
+    <option>Female</option>
+    <option>Other</option>
+  </select>
+
+  <label>Location (City)</label>
+  <input type="text" id="location" placeholder="Enter your city">
+
+  <label>LinkedIn / Portfolio</label>
+  <input type="text" id="linkedin" placeholder="Optional link">
+
+  <button type="button" onclick="nextStep()">Next</button>
+
+</div>
+
+<!-- STEP 2 -->
+<div id="step-2" class="step">
+<label>Education</label> <div id="education-section"> <!-- MAIN DEGREE --> <div class="edu-card"> <h3>Degree</h3> <label>Degree Type</label> <select id="degreeType"> <option>Undergraduate</option> <option>Postgraduate</option> <option>Diploma</option> </select> <label>Course / Degree Name</label> <input type="text" id="degreeName" placeholder="e.g. B.Tech in Computer Science" /> <label>College / University</label> <input type="text" id="college" placeholder="Enter college name" /> <div class="row"> <div> <label>Start Year</label> <input type="number" id="startYear" min="2000" max="2100" /> </div> <div> <label>End Year</label> <input type="number" id="endYear" min="2000" max="2100" /> </div> </div> <label>CGPA</label> <input type="number" id="cgpa" step="0.01" min="0" max="10" placeholder="e.g. 8.25"> </div> <!-- CLASS 12 --> <div class="edu-card"> <h3>Class 12 (Mandatory)</h3> <label>School Name</label> <input type="text" id="school12" required /> <label>Percentage</label> <input type="number" id="percent12" min="0" max="100" step="0.01" required /> <label>Year of Completion</label> <input type="number" id="year12" required /> </div> <!-- CLASS 10 --> <div class="edu-card"> <h3>Class 10 (Mandatory)</h3> <label>School Name</label> <input type="text" id="school10" required /> <label>Percentage</label> <input type="number" id="percent10" min="0" max="100" step="0.01" required /> <label>Year of Completion</label> <input type="number" id="year10" required /> </div> </div>
+
+  <button type="button" onclick="prevStep()">Back</button>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 3 -->
+<div id="step-3" class="step">
+
+  <label>Add up to 5 skills</label>
+
+  <input 
+    type="text" 
+    id="skillInput" 
+    placeholder="E.g. React"
+    oninput="showSuggestions()"
+  >
+
+  <div id="suggestions" class="suggestions"></div>
+
+  <!-- Selected skills -->
+  <div id="selectedSkills" class="selected-skills"></div>
+
+  <button type="button" onclick="prevStep()">Back</button>
+  <button onclick="nextStep()">Next</button>
+
+</div>
+
+<!-- STEP 4 -->
+<div id="step-4" class="step">
+
+  <!-- EXPERIENCE -->
+  <h3>Professional Experience</h3>
+
+  <label>Job Title</label>
+  <input type="text" id="jobTitle">
+
+  <label>Company</label>
+  <input type="text" id="company">
+
+  <label>Duration</label>
+  <input type="text" id="duration" placeholder="e.g. Jan 2023 - Dec 2023">
+
+  <label>Work Done</label>
+  <textarea id="workDesc"></textarea>
+
+  <button type="button" onclick="addExperience()">Add Experience</button>
+
+  <!-- Display -->
+  <div id="experienceList" class="list"></div>
+
+
+  <!-- PROJECTS -->
+  <h3 style="margin-top:30px;">Projects</h3>
+
+  <label>Project Title</label>
+  <input type="text" id="projectTitle">
+
+  <label>Work Done</label>
+  <textarea id="projectDesc"></textarea>
+
+  <button type="button" onclick="addProject()">Add Project</button>
+
+  <!-- Display -->
+  <div id="projectList" class="list"></div>
+
+
+  <button type="button" onclick="prevStep()">Back</button>
+  <button type="button" onclick="submitForm()">Submit</button>
+
+</div>
+
+<!-- RESULT -->
+<div id="result" class="step">
+  <h2>Analysis</h2>
+  <p id="output"></p>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
