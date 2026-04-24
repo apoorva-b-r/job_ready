@@ -804,3 +804,12 @@ footer {
     height: 250px;
   }
 }
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon svg {
+  display: block;
+}
