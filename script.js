@@ -2,12 +2,75 @@ window.nextStep = function() {};
 window.prevStep = function() {};
 window.submitForm = function() {};
 
+function defaultUserData() {
+  return {
+    resume: {},
+    analysis: {},
+    solved: {
+      dsa: [],
+      hr: [],
+      aptitude: []
+    }
+  };
+}
+
+window.getUserData = function() {
+  const raw = localStorage.getItem("userData");
+
+  if (!raw) {
+    return defaultUserData();
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    const base = defaultUserData();
+
+    return {
+      resume: parsed.resume || base.resume,
+      analysis: parsed.analysis || base.analysis,
+      solved: {
+        dsa: Array.isArray(parsed?.solved?.dsa) ? parsed.solved.dsa : [],
+        hr: Array.isArray(parsed?.solved?.hr) ? parsed.solved.hr : [],
+        aptitude: Array.isArray(parsed?.solved?.aptitude) ? parsed.solved.aptitude : []
+      }
+    };
+  } catch {
+    return defaultUserData();
+  }
+};
+
+window.setUserData = function(data) {
+  localStorage.setItem("userData", JSON.stringify(data));
+};
+
+function isQuestionSolved(topic, questionId) {
+  const userData = window.getUserData();
+  const solvedList = Array.isArray(userData?.solved?.[topic]) ? userData.solved[topic] : [];
+  return solvedList.includes(questionId);
+}
+
+function markQuestionSolved(topic, questionId) {
+  const userData = window.getUserData();
+
+  if (!Array.isArray(userData.solved[topic])) {
+    userData.solved[topic] = [];
+  }
+
+  if (!userData.solved[topic].includes(questionId)) {
+    userData.solved[topic].push(questionId);
+    window.setUserData(userData);
+  }
+}
+
+window.setUserData(window.getUserData());
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // ================= PARAMS =================
   const params = new URLSearchParams(window.location.search);
   const topic = params.get("topic");
   const id = parseInt(params.get("id"));
+  const isResumePage = Boolean(document.getElementById("firstName"));
 
   // ================= DATA =================
   const questionData = {
@@ -112,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 questionData[topic].forEach(q => {
 
-  const solved = localStorage.getItem(`solved-${topic}-${q.id}`);
+  const solved = isQuestionSolved(topic, q.id);
   const star = solved ? " ⭐" : "";
 
   const card = document.createElement("a");
@@ -239,12 +302,9 @@ else if (question.type === "mcq") {
 
     function updateProgress() {
       const total = questionData[topic].length;
-
-      let solved = 0;
-
-      questionData[topic].forEach(q => {
-        if (localStorage.getItem(`solved-${topic}-${q.id}`)) solved++;
-      });
+      const userData = window.getUserData();
+      const solvedList = Array.isArray(userData?.solved?.[topic]) ? userData.solved[topic] : [];
+      const solved = questionData[topic].filter(q => solvedList.includes(q.id)).length;
 
       const percent = Math.round((solved / total) * 100);
 
@@ -257,7 +317,7 @@ else if (question.type === "mcq") {
 
 window.submitCode = function () {
   const code = document.getElementById("code").value;
-  if (!code) {
+  if (!code.trim()) {
     output.innerText = "Write some code first ❌";
     return;
   }
@@ -293,7 +353,7 @@ window.submitCode = function () {
 
     if (passed === question.testCases.length) {
       resultText += "\n🎉 Great job! All test cases passed.";
-      localStorage.setItem(`solved-${topic}-${id}`, true);
+      markQuestionSolved(topic, id);
     } else {
       resultText += "\n⚠️ Some test cases failed.";
     }
@@ -320,7 +380,7 @@ window.submitHR = function () {
   }
 
   output.innerText = "Answer submitted ✅";
-  localStorage.setItem(`solved-${topic}-${id}`, true);
+  markQuestionSolved(topic, id);
   updateProgress();
 }
 
@@ -339,7 +399,7 @@ Correct ✅
 Explanation:
 ${question.explanation || "No explanation available"}
 `;
-        localStorage.setItem(`solved-${topic}-${id}`, true);
+  markQuestionSolved(topic, id);
       } else {
         output.innerText = `
 Wrong ❌
@@ -370,11 +430,11 @@ Correct Answer: ${question.answer}
 let currentStep = 1;
 
 let formData = {
-  name: "",
+  basic: {},
   education: {},
   skills: [],
-  experience: "",
-  projects: ""
+  experience: [],
+  projects: []
 };
 
 window.showStep = function(step) {
@@ -410,9 +470,18 @@ formData.basic = {
 
   if (currentStep === 2) {
     formData.education = {
+      degreeType: document.getElementById("degreeType")?.value || "",
       degree: document.getElementById("degreeName").value,
       college: document.getElementById("college").value,
-      cgpa: document.getElementById("cgpa").value
+      startYear: document.getElementById("startYear")?.value || "",
+      endYear: document.getElementById("endYear")?.value || "",
+      cgpa: document.getElementById("cgpa").value,
+      school12: document.getElementById("school12")?.value || "",
+      percent12: document.getElementById("percent12")?.value || "",
+      year12: document.getElementById("year12")?.value || "",
+      school10: document.getElementById("school10")?.value || "",
+      percent10: document.getElementById("percent10")?.value || "",
+      year10: document.getElementById("year10")?.value || ""
     };
   }
 
@@ -424,6 +493,16 @@ formData.basic = {
   formData.experience = experiences;
   formData.projects = projects;
 }
+
+  const userData = window.getUserData();
+  userData.resume = {
+    basic: formData.basic || {},
+    education: formData.education || {},
+    skills: [...(formData.skills || [])],
+    experience: [...(formData.experience || [])],
+    projects: [...(formData.projects || [])]
+  };
+  window.setUserData(userData);
 }
 
 window.submitForm = function() {
@@ -536,7 +615,7 @@ window.submitForm = function() {
   `;
 
   // Render UI
-  document.getElementById("output").innerHTML = `
+  const reportHtml = `
     <div class="report">
 
       <h2>👤 ${formData.basic.firstName} ${formData.basic.lastName}</h2>
@@ -571,6 +650,23 @@ window.submitForm = function() {
     </div>
   `;
 
+  document.getElementById("output").innerHTML = reportHtml;
+
+  const userData = window.getUserData();
+  userData.analysis = {
+    score,
+    readiness,
+    bestRole,
+    rolePercent,
+    strengths,
+    weaknesses,
+    recommendations,
+    explanation: explanation.trim(),
+    reportHtml,
+    updatedAt: new Date().toISOString()
+  };
+  window.setUserData(userData);
+
   document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
   document.getElementById("result").classList.add("active");
 }
@@ -593,6 +689,63 @@ const predefinedSkills = [
 ];
 
 let selectedSkills = [];
+
+function loadResumeData() {
+  if (!isResumePage) return;
+
+  const userData = window.getUserData();
+  const resume = userData.resume || {};
+  const basic = resume.basic || {};
+  const education = resume.education || {};
+
+  formData = {
+    basic,
+    education,
+    skills: Array.isArray(resume.skills) ? [...resume.skills] : [],
+    experience: Array.isArray(resume.experience) ? [...resume.experience] : [],
+    projects: Array.isArray(resume.projects) ? [...resume.projects] : []
+  };
+
+  selectedSkills = [...formData.skills];
+  experiences = [...formData.experience];
+  projects = [...formData.projects];
+
+  const setValue = (idName, value) => {
+    const el = document.getElementById(idName);
+    if (el) el.value = value || "";
+  };
+
+  setValue("firstName", basic.firstName);
+  setValue("lastName", basic.lastName);
+  setValue("email", basic.email);
+  setValue("phone", basic.phone);
+  setValue("dob", basic.dob);
+  setValue("gender", basic.gender);
+  setValue("location", basic.location);
+  setValue("linkedin", basic.linkedin);
+
+  setValue("degreeType", education.degreeType);
+  setValue("degreeName", education.degree);
+  setValue("college", education.college);
+  setValue("startYear", education.startYear);
+  setValue("endYear", education.endYear);
+  setValue("cgpa", education.cgpa);
+  setValue("school12", education.school12);
+  setValue("percent12", education.percent12);
+  setValue("year12", education.year12);
+  setValue("school10", education.school10);
+  setValue("percent10", education.percent10);
+  setValue("year10", education.year10);
+
+  renderSkills();
+  renderExperience();
+  renderProjects();
+
+  const output = document.getElementById("output");
+  if (output && userData.analysis?.reportHtml) {
+    output.innerHTML = userData.analysis.reportHtml;
+  }
+}
 
 window.showSuggestions = function() {
   const input = document.getElementById("skillInput").value.toLowerCase();
@@ -730,5 +883,91 @@ window.removeProject = function(index) {
   renderProjects();
 }
 
+loadResumeData();
+
+});
+
+// ================= PROFILE PAGE =================
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Only run on profile page
+  if (!document.getElementById("user-name")) return;
+
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const userData = window.getUserData();
+
+  console.log("Profile Load:", user, userData);
+
+  // 🔒 Safety checks
+  if (!user) {
+    document.body.innerHTML = "<h2>Please login first</h2>";
+    return;
+  }
+
+  // 👤 USER INFO
+  document.getElementById("user-name").innerText =
+    user.name || "User";
+
+  document.getElementById("user-email").innerText =
+    user.email || "";
+
+  // 📊 RESUME ANALYSIS
+  document.getElementById("score").innerText =
+    userData.analysis?.score ?? "N/A";
+
+  document.getElementById("role").innerText =
+    userData.analysis?.bestRole ?? "N/A";
+
+  // 📈 STRENGTHS
+  const strengthsList = document.getElementById("strengths");
+  strengthsList.innerHTML = "";
+
+  if (userData.analysis?.strengths?.length) {
+    userData.analysis.strengths.forEach(s => {
+      const li = document.createElement("li");
+      li.innerText = s;
+      strengthsList.appendChild(li);
+    });
+  } else {
+    strengthsList.innerHTML = "<li>No data yet</li>";
+  }
+
+  // ⚠️ WEAKNESSES
+  const weakList = document.getElementById("weaknesses");
+  weakList.innerHTML = "";
+
+  if (userData.analysis?.weaknesses?.length) {
+    userData.analysis.weaknesses.forEach(w => {
+      const li = document.createElement("li");
+      li.innerText = w;
+      weakList.appendChild(li);
+    });
+  } else {
+    weakList.innerHTML = "<li>No data yet</li>";
+  }
+
+  // ✅ PROGRESS COUNTS
+  const dsaCount = userData.solved?.dsa?.length ?? 0;
+  const hrCount = userData.solved?.hr?.length ?? 0;
+  const aptCount = userData.solved?.aptitude?.length ?? 0;
+
+  document.getElementById("dsa-count").innerText = dsaCount;
+  document.getElementById("hr-count").innerText = hrCount;
+  document.getElementById("apt-count").innerText = aptCount;
+
+  // 📊 TOTAL PROGRESS (optional but nice)
+  const totalSolved = dsaCount + hrCount + aptCount;
+  const totalEl = document.getElementById("total-solved");
+
+  if (totalEl) {
+    totalEl.innerText = totalSolved;
+  }
+
+  // 🎯 BONUS: show last analysis report (if exists)
+  const reportContainer = document.getElementById("analysis-report");
+
+  if (reportContainer && userData.analysis?.reportHtml) {
+    reportContainer.innerHTML = userData.analysis.reportHtml;
+  }
 
 });
