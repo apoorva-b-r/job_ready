@@ -157,10 +157,13 @@ questionData[topic].forEach(q => {
       `${question.title} (${question.difficulty || ""})`;
 
     // DESC + TAGS
-    document.getElementById("q-desc").innerHTML = `
-      ${question.desc}
-      ${question.tags ? `<p><strong>Tags:</strong> ${question.tags.join(", ")}</p>` : ""}
-    `;
+document.getElementById("q-desc").innerText = question.desc;
+
+if (question.tags) {
+  const tagDiv = document.createElement("p");
+  tagDiv.innerHTML = `<strong>Tags:</strong> ${question.tags.join(", ")}`;
+  document.getElementById("q-desc").appendChild(tagDiv);
+}
 
     // EXAMPLE
     if (question.example) {
@@ -182,18 +185,23 @@ questionData[topic].forEach(q => {
     }
 
     // TEST CASES
-    if (question.type === "code") {
-      const testDiv = document.createElement("div");
+if (question.type === "code") {
+  const testDiv = document.createElement("div");
 
-      testDiv.innerHTML = `
-        <h4>Test Cases</h4>
-        ${question.testCases.map((tc, i) => `
-          <p><strong>Case ${i+1}:</strong> nums=${JSON.stringify(tc.nums)}, target=${tc.target}</p>
-        `).join("")}
-      `;
+  testDiv.innerHTML = `
+    <h4>Test Cases</h4>
+    ${question.testCases.map((tc, i) => `
+      <p><strong>Case ${i+1}:</strong>
+        ${tc.nums !== undefined 
+          ? `nums=${JSON.stringify(tc.nums)}, target=${tc.target}` 
+          : `input=${tc.input}`
+        }
+      </p>
+    `).join("")}
+  `;
 
-      document.querySelector(".left").appendChild(testDiv);
-    }
+  document.querySelector(".left").appendChild(testDiv);
+}
 
     // RIGHT PANEL
     const right = document.getElementById("right-panel");
@@ -213,14 +221,19 @@ questionData[topic].forEach(q => {
       `;
     }
 
-    else if (question.type === "mcq") {
-      right.innerHTML = `
-        ${question.options.map(opt =>
-          `<label><input type="radio" name="mcq" value="${opt}"> ${opt}</label><br>`
-        ).join("")}
-        <button onclick="submitMCQ()">Submit</button>
-      `;
-    }
+else if (question.type === "mcq") {
+  right.innerHTML = `
+    <p style="margin-bottom:10px;"><strong>${question.desc}</strong></p>
+
+    ${question.options.map(opt =>
+      `<label>
+        <input type="radio" name="mcq" value="${opt}"> ${opt}
+      </label><br>`
+    ).join("")}
+
+    <button onclick="submitMCQ()">Submit</button>
+  `;
+}
 
     // ================= FUNCTIONS =================
 
@@ -244,7 +257,10 @@ questionData[topic].forEach(q => {
 
 window.submitCode = function () {
   const code = document.getElementById("code").value;
-
+  if (!code) {
+    output.innerText = "Write some code first ❌";
+    return;
+  }
   try {
     let passed = 0;
     let resultText = "";
@@ -290,11 +306,23 @@ window.submitCode = function () {
   }
 }
 
-    window.submitHR = function () {
-      output.innerText = "Answer submitted ✅";
-      localStorage.setItem(`solved-${topic}-${id}`, true);
-      updateProgress();
-    }
+window.submitHR = function () {
+  const ans = document.getElementById("hrAnswer").value.trim();
+
+  if (!ans) {
+    output.innerText = "Please write your answer first ❌";
+    return;
+  }
+
+  if (ans.length < 20) {
+    output.innerText = "Answer too short ⚠️ (Try to elaborate)";
+    return;
+  }
+
+  output.innerText = "Answer submitted ✅";
+  localStorage.setItem(`solved-${topic}-${id}`, true);
+  updateProgress();
+}
 
     window.submitMCQ = function () {
       const selected = document.querySelector("input[name='mcq']:checked");

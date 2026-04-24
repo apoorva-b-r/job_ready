@@ -6,43 +6,274 @@
 <title>Question</title>
 
 <style>
-body { background:#0f172a; color:white; font-family:sans-serif; }
+:root {
+  --bg: #0f172a;
+  --text: #f8fafc;
+  --card: #1e293b;
+  --input: #0b1220;
+  --border: #334155;
+  --output: #0b1220;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-2: #6366f1;
+  --button-text: #0f172a;
+  --shadow: 0 20px 45px rgba(2, 8, 23, 0.45);
+  --soft-shadow: 0 10px 25px rgba(2, 8, 23, 0.25);
+}
 
-.container { display:flex; gap:20px; }
+.light {
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --card: #ffffff;
+  --input: #ffffff;
+  --border: #dbe2ef;
+  --output: #e2e8f0;
+  --muted: #475569;
+  --accent: #0284c7;
+  --accent-2: #4f46e5;
+  --button-text: #ffffff;
+  --shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
+  --soft-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  line-height: 1.55;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px clamp(16px, 4vw, 44px);
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 72%, transparent);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand {
+  font-size: clamp(18px, 2.4vw, 24px);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.page-wrap {
+  width: min(1120px, 100% - 28px);
+  margin: 26px auto 40px;
+}
+
+#q-title {
+  font-size: clamp(24px, 3.8vw, 34px);
+  line-height: 1.2;
+  margin: 8px 0 18px;
+  letter-spacing: -0.03em;
+}
+
+.progress-wrap {
+  margin-bottom: 22px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--soft-shadow);
+}
+
+.progress-track {
+  background: var(--input);
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+#progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 999px;
+  transition: width 0.28s ease;
+}
+
+#progress-text {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(340px, 1.15fr);
+  gap: 20px;
+}
 
 .left, .right {
-  width:50%;
-  background:#1e293b;
-  padding:15px;
-  border-radius:8px;
+  background: var(--card);
+  padding: 22px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.left h3,
+.left h4 {
+  margin: 0 0 10px;
+}
+
+.left h3 {
+  font-size: 20px;
+}
+
+.left h4 {
+  margin-top: 18px;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+#q-desc,
+#q-example,
+#q-constraints {
+  color: var(--text);
+}
+
+#q-constraints {
+  margin: 0;
+  padding-left: 20px;
+}
+
+#q-constraints li {
+  margin-bottom: 8px;
+}
+
+.right {
+  position: relative;
+}
+
+.right::before {
+  content: "Code Workspace";
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
 }
 
 textarea {
-  width:100%;
-  height:250px;
-  background:#0f172a;
-  color:white;
-  border:1px solid #334155;
+  width: 100%;
+  min-height: 270px;
+  resize: vertical;
+  background: var(--input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 15px;
+  font-size: 15px;
+  font-family: "JetBrains Mono", "Fira Code", Menlo, monospace;
+  line-height: 1.6;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-button { margin-top:10px; padding:10px; cursor:pointer; }
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+button {
+  margin-top: 10px;
+  padding: 11px 18px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--button-text);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--accent-2) 30%, transparent);
+}
+
+button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+}
+
+button:active {
+  transform: translateY(0);
+}
 
 #output {
-  margin-top:20px;
-  padding:10px;
-  background:#111;
-  border-radius:6px;
+  margin-top: 20px;
+  padding: 16px 18px;
+  background: var(--output);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--soft-shadow);
+  min-height: 58px;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#react-toggle {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#react-toggle button {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  box-shadow: none;
+}
+
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .left, .right {
+    padding: 18px;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions button {
+    width: 100%;
+  }
 }
 </style>
 </head>
 
 <body>
+<div class="topbar">
+  <div class="brand">JobReady</div>
+  <div id="react-toggle"></div>
+</div>
 
+<div class="page-wrap">
 <h1 id="q-title"></h1>
 
-<div style="margin: 20px;">
-  <div style="background:#1e293b; height:10px; border-radius:10px;">
-    <div id="progress-fill" style="height:100%; width:0%; background:linear-gradient(90deg,#38bdf8,#6366f1); border-radius:10px;"></div>
+<div class="progress-wrap">
+  <div class="progress-track">
+    <div id="progress-fill"></div>
   </div>
   <p id="progress-text"></p>
 </div>
@@ -68,9 +299,32 @@ button { margin-top:10px; padding:10px; cursor:pointer; }
 
 <div id="output">Output will appear here...</div>
 
-<div style="margin-top:20px;">
+<div class="actions">
   <button onclick="nextQuestion()">Next Question →</button>
 </div>
+</div>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+  function ThemeToggle() {
+    const [dark, setDark] = React.useState(true);
+
+    React.useEffect(() => {
+      document.body.classList.toggle("light", !dark);
+    }, [dark]);
+
+    return (
+      <button onClick={() => setDark(!dark)}>
+        {dark ? "☀️ Light" : "🌙 Dark"}
+      </button>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("react-toggle"))
+    .render(<ThemeToggle />);
+</script>
 <script src="script.js"></script>
+
 </body>
 </html>
