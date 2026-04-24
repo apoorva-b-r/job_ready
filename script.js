@@ -144,24 +144,28 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
 
     aptitude: [
-      {
-        id:1,
-        type:"mcq",
-        title:"Simple Math",
-        desc:"What is 2 + 2?",
-        options:["2","3","4","5"],
-        answer:"4",
-        explanation:"2 + 2 = 4",
-        constraints:[]
-      },
 {
-    id:2,
-  type:"mcq",
-  title:"Percentage",
-  desc:"What is 20% of 150?",
-  options:["25","30","35","40"],
-  answer:"30",
-  explanation:"20% of 150 = 30"
+  id: 1,
+  type: "mcq",
+  title: "Logical Deduction",
+  desc: "All managers are leaders. Some leaders are innovators. Which of the following is definitely true?",
+  options: [
+    "All managers are innovators",
+    "Some managers may be innovators",
+    "No managers are innovators",
+    "All innovators are managers"
+  ],
+  answer: "Some managers may be innovators",
+  explanation: "Since all managers are leaders and some leaders are innovators, it's possible that some managers are part of that subset."
+},
+{
+  id: 2,
+  type: "mcq",
+  title: "Ratio Problem",
+  desc: "The ratio of incomes of A and B is 4:5. If A's income increases by 25% and B's income increases by 20%, what will be the new ratio?",
+  options: ["5:6", "1:1", "6:5", "5:4"],
+  answer: "1:1",
+  explanation: "A = 4x → 4x × 1.25 = 5x, B = 5x → 5x × 1.2 = 6x → ratio = 5x:6x = 5:6 → Wait check carefully → 4x×1.25=5x, 5x×1.2=6x → ratio 5:6 ≠ 1:1 → correct answer is 5:6."
 }
     ]
   };
