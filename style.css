@@ -872,15 +872,16 @@ footer {
 }
 
 .card-3d h2 {
-  font-size: var(--font-size-xl);
+  font-size: 30px;
   color: var(--color-primary-dark);
   margin: 0;
 }
 
 .card-3d p {
-  font-size: var(--font-size-sm);
+  font-size: 17px;
   color: var(--color-text-light);
   margin: 0;
+  line-height: 1.6;
 }
 
 /* ===== QUESTION TITLE & META ===== */
