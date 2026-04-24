@@ -51,12 +51,50 @@ if (localStorage.getItem("isLoggedIn") === "true") {
   <div class="auth-buttons" id="nav-actions"></div>
 </nav>
 
-  <section class="hero">
-    <h1>Prepare. Practice. Get Hired!</h1>
-    <p>Your all-in-one platform for Resume Building & Interview Practice</p>
+<section class="hero">
+  <div class="hero-layout">
+    <div class="hero-content">
+      <h1>
+        Prepare <span class="highlight">Smarter</span>.<br>
+        Get Hired <span class="highlight">Faster</span>.
+      </h1>
 
-    <a href="#map-section" class="btn" id="start-btn">Get Started</a>
-  </section>
+      <p>
+        Practice DSA, master interviews, and build your resume —
+        all in one place.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#map-section" class="btn-primary" id="start-btn">Get Started</a>
+        <a href="topics.html" class="btn-secondary">Explore</a>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-visual-glow"></div>
+      <div class="hero-image-wrap">
+        <img src="hpimg.png" alt="JobReady hero illustration" class="hero-image" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features landing-features">
+  <div class="feature-card">
+    <h3>💻 Practice DSA</h3>
+    <p>Solve curated coding problems with real-time feedback.</p>
+  </div>
+
+  <div class="feature-card">
+    <h3>🧠 Aptitude & HR</h3>
+    <p>Sharpen reasoning and interview communication skills.</p>
+  </div>
+
+  <div class="feature-card">
+    <h3>📄 Resume Analyzer</h3>
+    <p>Get insights, score, and improve your resume instantly.</p>
+  </div>
+</section>
 
   <!-- Map Section -->
   <section class="map-section" id="map-section">
@@ -119,13 +157,13 @@ if (localStorage.getItem("isLoggedIn") === "true") {
       html: `
         <svg width="36" height="44" viewBox="0 0 36 44" xmlns="http://www.w3.org/2000/svg">
           <!-- Shadow -->
-          <ellipse cx="18" cy="40" rx="10" ry="3" fill="rgba(0,0,0,0.15)"/>
-          <!-- Pin body - Darker Lavender -->
-          <path d="M18 0C8.059 0 0 8.059 0 18c0 12 18 26 18 26s18-14 18-26C36 8.059 27.941 0 18 0z" fill="#a873a8"/>
-          <!-- Inner circle - Light Lavender -->
-          <circle cx="18" cy="16" r="8" fill="#e8d5f2"/>
-          <!-- Center dot - Accent purple -->
-          <circle cx="18" cy="16" r="4" fill="#9d5fa0"/>
+          <ellipse cx="18" cy="40" rx="10" ry="3" fill="rgba(0,0,0,0.2)"/>
+          <!-- Pin body -->
+          <path d="M18 0C8.059 0 0 8.059 0 18c0 12 18 26 18 26s18-14 18-26C36 8.059 27.941 0 18 0z" fill="#6366f1"/>
+          <!-- Inner circle -->
+          <circle cx="18" cy="16" r="8" fill="white"/>
+          <!-- Center dot -->
+          <circle cx="18" cy="16" r="4" fill="#6366f1"/>
         </svg>
       `,
       iconSize: [36, 44],
