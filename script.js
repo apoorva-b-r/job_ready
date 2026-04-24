@@ -220,12 +220,18 @@ questionData[topic].forEach(q => {
       `${question.title} (${question.difficulty || ""})`;
 
     // DESC + TAGS
-document.getElementById("q-desc").innerText = question.desc;
+const descEl = document.getElementById("q-desc");
+
+descEl.innerHTML = "";
+
+const text = document.createElement("p");
+text.innerText = question.desc || "No description available";
+descEl.appendChild(text);
 
 if (question.tags) {
   const tagDiv = document.createElement("p");
   tagDiv.innerHTML = `<strong>Tags:</strong> ${question.tags.join(", ")}`;
-  document.getElementById("q-desc").appendChild(tagDiv);
+  descEl.appendChild(tagDiv);
 }
 
     // EXAMPLE
@@ -236,19 +242,22 @@ if (question.tags) {
     }
 
     // CONSTRAINTS
-    const ul = document.getElementById("q-constraints");
-    if (question.constraints?.length) {
-      question.constraints.forEach(c => {
-        const li = document.createElement("li");
-        li.innerText = c;
-        ul.appendChild(li);
-      });
-    } else {
-      ul.parentElement.style.display = "none";
-    }
+const ul = document.getElementById("q-constraints");
+
+ul.innerHTML = "";
+
+if (question.constraints?.length) {
+  question.constraints.forEach(c => {
+    const li = document.createElement("li");
+    li.innerText = c;
+    ul.appendChild(li);
+  });
+} else {
+  ul.innerHTML = "<li>No constraints</li>";
+}
 
     // TEST CASES
-if (question.type === "code") {
+if (question.type === "code" && question.testCases?.length) {
   const testDiv = document.createElement("div");
 
   testDiv.innerHTML = `
@@ -283,16 +292,17 @@ if (question.type === "code") {
         <button onclick="submitHR()">Submit</button>
       `;
     }
-
 else if (question.type === "mcq") {
   right.innerHTML = `
-    <p style="margin-bottom:10px;"><strong>${question.desc}</strong></p>
+    <div style="margin-bottom:15px; font-weight:600;">
+      ${question.desc}
+    </div>
 
-    ${question.options.map(opt =>
-      `<label>
+    ${question.options.map(opt => `
+      <label style="display:block; margin:8px 0;">
         <input type="radio" name="mcq" value="${opt}"> ${opt}
-      </label><br>`
-    ).join("")}
+      </label>
+    `).join("")}
 
     <button onclick="submitMCQ()">Submit</button>
   `;

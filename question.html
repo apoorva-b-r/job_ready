@@ -309,20 +309,23 @@ button:active {
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel">
-  function ThemeToggle() {
-    const [dark, setDark] = React.useState(true);
+function ThemeToggle() {
+  const [dark, setDark] = React.useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true;
+  });
 
-    React.useEffect(() => {
-      document.body.classList.toggle("light", !dark);
-    }, [dark]);
+  React.useEffect(() => {
+    document.body.classList.toggle("light", !dark);
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  }, [dark]);
 
-    return (
-      <button onClick={() => setDark(!dark)}>
-        {dark ? "☀️ Light" : "🌙 Dark"}
-      </button>
-    );
-  }
-
+  return (
+    <button onClick={() => setDark(!dark)}>
+      {dark ? "☀️ Light" : "🌙 Dark"}
+    </button>
+  );
+}
   ReactDOM.createRoot(document.getElementById("react-toggle"))
     .render(<ThemeToggle />);
 </script>
