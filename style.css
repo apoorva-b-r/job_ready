@@ -405,9 +405,9 @@ section {
 }
 
 .section-title {
-  font-size: var(--font-size-2xl);
+  font-size: 28px;
   color: var(--color-accent);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 28px;
   text-align: center;
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.01em;
@@ -574,14 +574,14 @@ footer {
 /* FULL WIDTH CARD */
 .card-3d {
   width: 100%;
-  max-width: 900px; 
+  max-width: 1100px; 
   margin: 0 auto;   
   
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
 
-  padding: 20px;
+  padding: 28px;
   border-radius: 18px;
 
   background: var(--color-card);
@@ -593,6 +593,7 @@ footer {
 
   transition: all 0.25s ease;
 }
+
 /* HORIZONTAL CARD */
 .card-3d.horizontal {
   display: flex;
@@ -606,8 +607,8 @@ footer {
 
 /* IMAGE SIDE */
 .card-image {
-  width: 180px;
-  height: 140px;
+  width: 220px;
+  height: 160px;
   flex-shrink: 0;
   border-radius: 12px;
   overflow: hidden;
@@ -635,7 +636,7 @@ footer {
 /* HOVER EFFECT */
 .card-3d:hover{
   opacity: 1;
-  transform: translateY(-5px) scale(1.01);
+  transform: translateY(-6px) scale(1.02);
   box-shadow: var(--shadow-lg);
 }
 .card-image img {
@@ -662,7 +663,7 @@ footer {
 
 /* TEXT SIDE */
 .card-info h2 {
-  font-size: 26px;
+  font-size: 34px;
   font-weight: 700;
   color: var(--color-accent);
   margin-bottom: 8px;
@@ -670,7 +671,7 @@ footer {
 }
 
 .card-info p {
-  font-size: 15.5px;
+  font-size: 18px;
   color: #6b7280;
   line-height: 1.6;
   max-width: 500px;
@@ -681,7 +682,7 @@ footer {
 .features {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 32px;
 }
 .card-3d:hover {
   transform: translateY(-4px);
