@@ -1,298 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Resume Builder</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Builder - JobReady</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .container {
+      max-width: 800px;
+      margin: var(--spacing-2xl) auto;
+      padding: var(--spacing-2xl);
+      background: var(--color-card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+    }
 
-<style>
-body {
-  background: #0f172a;
-  color: #e2e8f0;
-  font-family: 'Segoe UI', sans-serif;
-}
+    .container h1 {
+      text-align: center;
+      color: var(--color-primary-dark);
+      margin-bottom: var(--spacing-2xl);
+    }
 
-.container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #1e293b;
-  border-radius: 12px;
-}
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-lg);
+    }
 
-h1 { text-align: center; color: #38bdf8; }
+    .edu-card {
+      background: var(--color-bg-alt);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin: var(--spacing-lg) 0;
+      border: 1px solid var(--color-border);
+    }
 
-label { margin-top: 15px; display: block; }
+    .edu-card h3 {
+      color: var(--color-primary-dark);
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--spacing-md);
+    }
 
-input, textarea, select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  background: #0f172a;
-  color: white;
-  border: 1px solid #334155;
-}
+    label {
+      display: block;
+      margin-top: var(--spacing-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+    }
 
-.skills {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 10px;
-}
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: var(--spacing-md);
+      margin-top: var(--spacing-xs);
+      background: var(--color-bg-alt);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: border-color var(--transition-base);
+    }
 
-button {
-  margin-top: 20px;
-  padding: 12px;
-  width: 100%;
-  background: #38bdf8;
-  border: none;
-  cursor: pointer;
-}
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="date"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(216, 191, 216, 0.2);
+    }
 
-.step { display: none; }
-.step.active { display: block; }
-.suggestions {
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 6px;
-  margin-top: 5px;
-  max-height: 150px;
-  overflow-y: auto;
-}
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
 
-.suggestions div {
-  padding: 10px;
-  cursor: pointer;
-}
+    button {
+      margin-top: var(--spacing-xl);
+      padding: var(--spacing-md) var(--spacing-lg);
+      width: 100%;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
 
-.suggestions div:hover {
-  background: #334155;
-}
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
 
-.selected-skills {
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+    button:active {
+      transform: translateY(0);
+    }
 
-.skill-tag {
-  background: #334155;
-  padding: 6px 10px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+    .step {
+      display: none;
+    }
 
-.skill-tag span {
-  cursor: pointer;
-  color: #f87171;
-}
+    .step.active {
+      display: block;
+    }
 
-.list {
-  margin-top: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    .suggestions {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      margin-top: var(--spacing-md);
+      max-height: 200px;
+      overflow-y: auto;
+    }
 
-.card-item {
-  background: #0f172a;
-  border: 1px solid #334155;
-  padding: 10px;
-  border-radius: 6px;
-  position: relative;
-}
+    .suggestions div {
+      padding: var(--spacing-md);
+      cursor: pointer;
+      transition: background-color var(--transition-base);
+    }
 
-.card-item span {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  cursor: pointer;
-  color: #f87171;
-}
-#result {
-  line-height: 1.6;
-}
+    .suggestions div:hover {
+      background: linear-gradient(135deg, rgba(216, 191, 216, 0.2) 0%, rgba(167, 139, 218, 0.2) 100%);
+    }
 
-#result h3 {
-  color: #38bdf8;
-}
+    .selected-skills {
+      margin-top: var(--spacing-lg);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+    }
 
-#result h4 {
-  margin-top: 15px;
-  color: #facc15;
-}
-.report {
-  line-height: 1.6;
-}
+    .skill-tag {
+      background: linear-gradient(135deg, var(--color-primary-light) 0%, rgba(216, 191, 216, 0.3) 100%);
+      padding: var(--spacing-xs) var(--spacing-md);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      color: var(--color-primary-dark);
+      font-weight: var(--font-weight-semibold);
+    }
 
-.score-box {
-  background: #0f172a;
-  border: 1px solid #334155;
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
-  margin-bottom: 20px;
-}
+    .skill-tag span {
+      cursor: pointer;
+      color: var(--color-danger);
+      font-weight: bold;
+    }
 
-.score-box h3 {
-  font-size: 28px;
-  color: #38bdf8;
-}
+    .skill-tag span:hover {
+      color: #c50052;
+    }
 
-.bar-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 10px 0;
-}
+    .list {
+      margin-top: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
 
-.bar {
-  flex: 1;
-  height: 10px;
-  background: #1e293b;
-  border-radius: 10px;
-  overflow: hidden;
-}
+    .card-item {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-lg);
+      position: relative;
+      transition: all var(--transition-base);
+    }
 
-.fill {
-  height: 100%;
-  background: linear-gradient(90deg, #38bdf8, #6366f1);
-}
+    .card-item:hover {
+      border-color: var(--color-primary-light);
+      box-shadow: var(--shadow-md);
+    }
 
-.best-role {
-  margin-top: 10px;
-  font-size: 18px;
-  color: #22c55e;
-}
-</style>
+    .card-item span {
+      position: absolute;
+      right: var(--spacing-lg);
+      top: var(--spacing-lg);
+      cursor: pointer;
+      color: var(--color-danger);
+      font-weight: bold;
+      transition: color var(--transition-base);
+    }
+
+    .card-item span:hover {
+      color: #c50052;
+    }
+
+    #result {
+      line-height: 1.8;
+    }
+
+    #result h3 {
+      color: var(--color-primary-dark);
+      margin-top: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+    }
+
+    #result h4 {
+      color: var(--color-accent);
+      margin-top: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .report {
+      line-height: 1.8;
+    }
+
+    .score-box {
+      background: var(--color-bg-alt);
+      border: 2px solid var(--color-primary-light);
+      padding: var(--spacing-xl);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .score-box h3 {
+      font-size: 32px;
+      color: var(--color-primary-dark);
+      margin: 0 0 var(--spacing-md);
+    }
+
+    .bar-container {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      margin: var(--spacing-lg) 0;
+    }
+
+    .bar {
+      flex: 1;
+      height: 10px;
+      background: var(--color-border);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    }
+
+    .best-role {
+      margin-top: var(--spacing-md);
+      font-size: var(--font-size-lg);
+      color: var(--color-success);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: var(--spacing-xl) auto;
+        padding: var(--spacing-xl);
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <nav class="navbar">
+    <h1 class="logo">JobReady</h1>
+    <div class="auth-buttons" id="nav-actions"></div>
+  </nav>
 
-<div class="container">
-<h1>Resume Builder</h1>
+  <div class="container">
+    <h1>Resume Builder</h1>
 
-<!-- STEP 1 -->
-<div id="step-1" class="step active">
+    <!-- STEP 1: BASIC INFO -->
+    <div id="step-1" class="step active">
+      <label>First Name</label>
+      <input type="text" id="firstName" placeholder="Enter your first name" required>
 
-  <label>First Name</label>
-  <input type="text" id="firstName" placeholder="Enter first name" required>
+      <label>Last Name</label>
+      <input type="text" id="lastName" placeholder="Enter your last name" required>
 
-  <label>Last Name</label>
-  <input type="text" id="lastName" placeholder="Enter last name" required>
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Enter your email address" required>
 
-  <label>Email</label>
-  <input type="email" id="email" placeholder="Enter email" required>
+      <label>Phone Number</label>
+      <input type="tel" id="phone" placeholder="Enter your phone number" required>
 
-  <label>Phone Number</label>
-  <input type="tel" id="phone" placeholder="Enter phone number" required>
+      <label>Date of Birth</label>
+      <input type="date" id="dob" required>
 
-  <label>Date of Birth</label>
-  <input type="date" id="dob" required>
+      <label>Gender</label>
+      <select id="gender">
+        <option value="">Select your gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
 
-  <label>Gender</label>
-  <select id="gender">
-    <option value="">Select</option>
-    <option>Male</option>
-    <option>Female</option>
-    <option>Other</option>
-  </select>
+      <label>Location (City)</label>
+      <input type="text" id="location" placeholder="Enter your city">
 
-  <label>Location (City)</label>
-  <input type="text" id="location" placeholder="Enter your city">
+      <label>LinkedIn / Portfolio</label>
+      <input type="text" id="linkedin" placeholder="Optional: paste your portfolio or LinkedIn URL">
 
-  <label>LinkedIn / Portfolio</label>
-  <input type="text" id="linkedin" placeholder="Optional link">
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
 
-  <button type="button" onclick="nextStep()">Next</button>
+    <!-- STEP 2: EDUCATION -->
+    <div id="step-2" class="step">
+      <h2>Education</h2>
+      <div id="education-section">
+        <!-- MAIN DEGREE -->
+        <div class="edu-card">
+          <h3>Degree</h3>
+          <label>Degree Type</label>
+          <select id="degreeType">
+            <option>Undergraduate</option>
+            <option>Postgraduate</option>
+            <option>Diploma</option>
+          </select>
+          <label>Course / Degree Name</label>
+          <input type="text" id="degreeName" placeholder="e.g. B.Tech in Computer Science" />
+          <label>College / University</label>
+          <input type="text" id="college" placeholder="Enter college name" />
+          <div class="row">
+            <div>
+              <label>Start Year</label>
+              <input type="number" id="startYear" min="2000" max="2100" />
+            </div>
+            <div>
+              <label>End Year</label>
+              <input type="number" id="endYear" min="2000" max="2100" />
+            </div>
+          </div>
+          <label>CGPA</label>
+          <input type="number" id="cgpa" step="0.01" min="0" max="10" placeholder="e.g. 8.25">
+        </div>
 
-</div>
+        <!-- CLASS 12 -->
+        <div class="edu-card">
+          <h3>Class 12 (Required)</h3>
+          <label>School Name</label>
+          <input type="text" id="school12" required />
+          <label>Percentage</label>
+          <input type="number" id="percent12" min="0" max="100" step="0.01" required />
+          <label>Year of Completion</label>
+          <input type="number" id="year12" required />
+        </div>
 
-<!-- STEP 2 -->
-<div id="step-2" class="step">
-<label>Education</label> <div id="education-section"> <!-- MAIN DEGREE --> <div class="edu-card"> <h3>Degree</h3> <label>Degree Type</label> <select id="degreeType"> <option>Undergraduate</option> <option>Postgraduate</option> <option>Diploma</option> </select> <label>Course / Degree Name</label> <input type="text" id="degreeName" placeholder="e.g. B.Tech in Computer Science" /> <label>College / University</label> <input type="text" id="college" placeholder="Enter college name" /> <div class="row"> <div> <label>Start Year</label> <input type="number" id="startYear" min="2000" max="2100" /> </div> <div> <label>End Year</label> <input type="number" id="endYear" min="2000" max="2100" /> </div> </div> <label>CGPA</label> <input type="number" id="cgpa" step="0.01" min="0" max="10" placeholder="e.g. 8.25"> </div> <!-- CLASS 12 --> <div class="edu-card"> <h3>Class 12 (Mandatory)</h3> <label>School Name</label> <input type="text" id="school12" required /> <label>Percentage</label> <input type="number" id="percent12" min="0" max="100" step="0.01" required /> <label>Year of Completion</label> <input type="number" id="year12" required /> </div> <!-- CLASS 10 --> <div class="edu-card"> <h3>Class 10 (Mandatory)</h3> <label>School Name</label> <input type="text" id="school10" required /> <label>Percentage</label> <input type="number" id="percent10" min="0" max="100" step="0.01" required /> <label>Year of Completion</label> <input type="number" id="year10" required /> </div> </div>
+        <!-- CLASS 10 -->
+        <div class="edu-card">
+          <h3>Class 10 (Required)</h3>
+          <label>School Name</label>
+          <input type="text" id="school10" required />
+          <label>Percentage</label>
+          <input type="number" id="percent10" min="0" max="100" step="0.01" required />
+          <label>Year of Completion</label>
+          <input type="number" id="year10" required />
+        </div>
+      </div>
 
-  <button type="button" onclick="prevStep()">Back</button>
-  <button type="button" onclick="nextStep()">Next</button>
-</div>
+      <button type="button" onclick="prevStep()">Back</button>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
 
-<!-- STEP 3 -->
-<div id="step-3" class="step">
+    <!-- STEP 3: SKILLS -->
+    <div id="step-3" class="step">
+      <h2>Skills</h2>
+      <p style="color: var(--color-text-light); margin-bottom: var(--spacing-md);">Add up to 5 skills</p>
 
-  <label>Add up to 5 skills</label>
+      <input 
+        type="text" 
+        id="skillInput" 
+        placeholder="E.g. React, Python, JavaScript"
+        oninput="showSuggestions()"
+      >
 
-  <input 
-    type="text" 
-    id="skillInput" 
-    placeholder="E.g. React"
-    oninput="showSuggestions()"
-  >
+      <div id="suggestions" class="suggestions"></div>
 
-  <div id="suggestions" class="suggestions"></div>
+      <!-- Selected skills -->
+      <div id="selectedSkills" class="selected-skills"></div>
 
-  <!-- Selected skills -->
-  <div id="selectedSkills" class="selected-skills"></div>
+      <button type="button" onclick="prevStep()">Back</button>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
 
-  <button type="button" onclick="prevStep()">Back</button>
-  <button onclick="nextStep()">Next</button>
+    <!-- STEP 4: EXPERIENCE & PROJECTS -->
+    <div id="step-4" class="step">
+      <h2>Experience & Projects</h2>
 
-</div>
+      <!-- EXPERIENCE -->
+      <h3 style="margin-top: var(--spacing-xl);">Professional Experience</h3>
 
-<!-- STEP 4 -->
-<div id="step-4" class="step">
+      <label>Job Title</label>
+      <input type="text" id="jobTitle" placeholder="e.g. Software Developer">
 
-  <!-- EXPERIENCE -->
-  <h3>Professional Experience</h3>
+      <label>Company</label>
+      <input type="text" id="company" placeholder="Enter company name">
 
-  <label>Job Title</label>
-  <input type="text" id="jobTitle">
+      <label>Duration</label>
+      <input type="text" id="duration" placeholder="e.g. Jan 2023 - Dec 2023">
 
-  <label>Company</label>
-  <input type="text" id="company">
+      <label>Work Done</label>
+      <textarea id="workDesc" placeholder="Describe your responsibilities and achievements..."></textarea>
 
-  <label>Duration</label>
-  <input type="text" id="duration" placeholder="e.g. Jan 2023 - Dec 2023">
+      <button type="button" onclick="addExperience()">Add Experience</button>
 
-  <label>Work Done</label>
-  <textarea id="workDesc"></textarea>
+      <!-- Display -->
+      <div id="experienceList" class="list"></div>
 
-  <button type="button" onclick="addExperience()">Add Experience</button>
+      <!-- PROJECTS -->
+      <h3 style="margin-top: var(--spacing-2xl);">Projects</h3>
 
-  <!-- Display -->
-  <div id="experienceList" class="list"></div>
+      <label>Project Title</label>
+      <input type="text" id="projectTitle" placeholder="Enter project name">
 
+      <label>Description</label>
+      <textarea id="projectDesc" placeholder="Describe your project and what you built..."></textarea>
 
-  <!-- PROJECTS -->
-  <h3 style="margin-top:30px;">Projects</h3>
+      <button type="button" onclick="addProject()">Add Project</button>
 
-  <label>Project Title</label>
-  <input type="text" id="projectTitle">
+      <!-- Display -->
+      <div id="projectList" class="list"></div>
 
-  <label>Work Done</label>
-  <textarea id="projectDesc"></textarea>
+      <button type="button" onclick="prevStep()">Back</button>
+      <button type="button" onclick="submitForm()">Analyze My Resume</button>
+    </div>
 
-  <button type="button" onclick="addProject()">Add Project</button>
+    <!-- RESULT -->
+    <div id="result" class="step">
+      <h2 style="text-align: center; color: var(--color-primary-dark);">Resume Analysis</h2>
+      <p id="output"></p>
+    </div>
+  </div>
 
-  <!-- Display -->
-  <div id="projectList" class="list"></div>
+  <script src="auth.js"></script>
+  <script src="script.js"></script>
+  <script>
+    window.onload = function() {
+      const nav = document.getElementById("nav-actions");
 
-
-  <button type="button" onclick="prevStep()">Back</button>
-  <button type="button" onclick="submitForm()">Submit</button>
-
-</div>
-
-<!-- RESULT -->
-<div id="result" class="step">
-  <h2>Analysis</h2>
-  <p id="output"></p>
-</div>
-
-</div>
-
-<script src="script.js"></script>
-
+      if (localStorage.getItem("isLoggedIn") === "true") {
+        nav.innerHTML = `
+          <a href="index.html" class="auth-btn">Home</a>
+          <a href="profile.html" class="auth-btn">Profile</a>
+          <a href="topics.html" class="auth-btn">Practice</a>
+          <a href="#" onclick="logout()" class="auth-btn">Logout</a>
+        `;
+      } else {
+        nav.innerHTML = `
+          <a href="signin.html" class="auth-btn">Sign In</a>
+          <a href="signup.html" class="auth-btn">Sign Up</a>
+        `;
+      }
+    };
+  </script>
 </body>
 </html>

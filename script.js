@@ -415,15 +415,18 @@ Correct Answer: ${question.answer}
       output.innerText = question.hint || "No hint available";
     }
 
-    window.nextQuestion = function () {
-      const nextId = id + 1;
+window.nextQuestion = function () {
+  const nextId = id + 1;
 
-      if (questionData[topic].some(q => q.id === nextId)) {
-        window.location.href = `question.html?topic=${topic}&id=${nextId}`;
-      } else {
-        alert("No more questions 🎉");
-      }
-    }
+  if (questionData[topic].some(q => q.id === nextId)) {
+    window.location.href = `question.html?topic=${topic}&id=${nextId}`;
+  } else {
+    alert("No more questions 🎉");
+
+    // 🔥 redirect back to topic page
+    window.location.href = `topic.html?topic=${topic}`;
+  }
+}
   }
 
 

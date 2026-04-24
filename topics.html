@@ -62,12 +62,9 @@
 
   <!-- OPTIONAL (for consistency) -->
   <footer>
-    <p>2026 JobReady</p>
+    <p>&copy; 2024 JobReady. All rights reserved.</p>
   </footer>
 </body>
-<script src="auth.js"></script>
-
-
 <script src="auth.js"></script>
 
 <script>
@@ -77,6 +74,8 @@ window.onload = function() {
   if (localStorage.getItem("isLoggedIn") === "true") {
     nav.innerHTML = `
       <a href="index.html" class="auth-btn">Home</a>
+      <a href="profile.html" class="auth-btn">Profile</a>
+      <a href="topics.html" class="auth-btn">Practice</a>
       <a href="#" onclick="logout()" class="auth-btn">Logout</a>
     `;
   } else {
