@@ -10,6 +10,8 @@ if (localStorage.getItem("isLoggedIn") === "true") {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JobReady</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Leaflet.js CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
@@ -24,7 +26,14 @@ if (localStorage.getItem("isLoggedIn") === "true") {
     <h1>Prepare. Practice. Get Hired!</h1>
     <p>Your all-in-one platform for Resume Building & Interview Practice</p>
 
-    <a href="#" class="btn" id="start-btn">Get Started</a>
+    <a href="#map-section" class="btn" id="start-btn">Get Started</a>
+  </section>
+
+  <!-- Map Section -->
+  <section class="map-section" id="map-section">
+    <h2>Visit Our Office</h2>
+    <p class="map-subtitle">Find us at JobReady HQ in Mumbai</p>
+    <div id="map"></div>
   </section>
 
 </body>
@@ -56,4 +65,50 @@ if (localStorage.getItem("isLoggedIn") === "true") {
   startBtn.href = "signin.html";
 }
 </script>
+
+<!-- Leaflet.js Library -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  // Initialize Leaflet Map
+  document.addEventListener('DOMContentLoaded', function() {
+    // Office coordinates (Mumbai, India)
+    const officeLat = 19.0760;
+    const officeLng = 72.8777;
+
+    // Create the map centered on Mumbai
+    const map = L.map('map').setView([officeLat, officeLng], 13);
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Custom SVG marker icon
+    const customIcon = L.divIcon({
+      className: 'custom-marker',
+      html: `
+        <svg width="36" height="44" viewBox="0 0 36 44" xmlns="http://www.w3.org/2000/svg">
+          <!-- Shadow -->
+          <ellipse cx="18" cy="40" rx="10" ry="3" fill="rgba(0,0,0,0.2)"/>
+          <!-- Pin body -->
+          <path d="M18 0C8.059 0 0 8.059 0 18c0 12 18 26 18 26s18-14 18-26C36 8.059 27.941 0 18 0z" fill="#6366f1"/>
+          <!-- Inner circle -->
+          <circle cx="18" cy="16" r="8" fill="white"/>
+          <!-- Center dot -->
+          <circle cx="18" cy="16" r="4" fill="#6366f1"/>
+        </svg>
+      `,
+      iconSize: [36, 44],
+      iconAnchor: [18, 44],
+      popupAnchor: [0, -40]
+    });
+
+    // Add marker with popup
+    const marker = L.marker([officeLat, officeLng], { icon: customIcon }).addTo(map);
+    
+    marker.bindPopup('<div class="custom-popup"><strong>Our Office - JobReady HQ</strong></div>');
+  });
+</script>
+
 </html>

@@ -78,6 +78,60 @@ footer {
   justify-content: center;
   flex-wrap: wrap;
 }
+
+/* Map Section Styles */
+.map-section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.map-section h2 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.map-subtitle {
+  color: #94a3b8;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+/* Map Container */
+#map {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  margin: 0 auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Marker Styles */
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Custom Popup Styles */
+.custom-popup {
+  text-align: center;
+  padding: 5px;
+}
+
+.custom-popup strong {
+  color: #1e293b;
+  font-size: 14px;
+}
+
+/* Leaflet popup customization */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-popup-tip {
+  background: white;
+}
 .features {
   display: flex;
   justify-content: center;
